@@ -23,14 +23,16 @@ CheckBox checkbox;
 //Initialize Global Variables
 float c1, c2, c3, c4, c5, c6;
 float[] Px, Py, Nx, Ny;
-
-int i = 1;
 int count;
+
+//Variables for tracing out paths
+int i = 1;
 boolean trace = false;
 
 
 
 void setup() {
+  //Initialize Point Location Matrices
   Px = new float[numPts];
   Nx = new float[numPts];
   Py = new float[numPts];
@@ -42,6 +44,7 @@ void setup() {
   textSize(15);
   fill(20, 20, 100);
   
+  //cp5 Controllers allow for sliders and buttons
   cp5 = new ControlP5(this);
   cp5.addButton("Graph")
      .setValue(0)
@@ -85,6 +88,7 @@ void setup() {
                 ;
 }  
 
+//controlEvent determines if event is from checkbox, and alters draw mode accordingly
 public void controlEvent(ControlEvent theEvent) {
   if(theEvent.isFrom(checkbox)) {
       if(trace) {
@@ -115,6 +119,7 @@ public void radiusB(float newRadius) {
   radiusB = newRadius;
 }
  
+ //Refresh screen
 public void Graph() {
   i = 1;
   background(255);
@@ -156,6 +161,7 @@ void draw() {
   thetaB = spinB * count;
   }
 
+  //Insert Text
   text("Spin A", 300, 40);
   text("Spin B", 550, 40);
   text("Radius A", 300, 540);
@@ -168,6 +174,7 @@ void draw() {
   
 }
 
+//Prints out the plotted points
 void print() {
   if(trace == false) {
     for(int j = 1; j < count; j++){

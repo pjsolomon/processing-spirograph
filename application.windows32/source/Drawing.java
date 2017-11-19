@@ -32,19 +32,25 @@ float lenB = 3.0f;
 //Distance Between Circle Centers
 float cDist = 12.0f; //Might also jsut assign the y values of the plot?
 //Rotation Speeds of A and B
-float spinA = 100;
+float spinA = 10;
 float spinB = 2;
-//Points?
+//Points
 final int numPts = 20000;
+CheckBox checkbox;
 
 //Initialize Global Variables
 float c1, c2, c3, c4, c5, c6;
 float[] Px, Py, Nx, Ny;
-
-int i = 1;
 int count;
 
+//Variables for tracing out paths
+int i = 1;
+boolean trace = false;
+
+
+
 public void setup() {
+  //Initialize Point Location Matrices
   Px = new float[numPts];
   Nx = new float[numPts];
   Py = new float[numPts];
@@ -56,6 +62,7 @@ public void setup() {
   textSize(15);
   fill(20, 20, 100);
   
+  //cp5 Controllers allow for sliders and buttons
   cp5 = new ControlP5(this);
   cp5.addButton("Graph")
      .setValue(0)
@@ -76,7 +83,7 @@ public void setup() {
      ;
      
      cp5.addSlider("radiusA")
-     .setPosition(50,550)
+     .setPosition(300,550)
      .setRange(01,10)
      .setSize(200,19)
      .setNumberOfTickMarks(10)
@@ -89,10 +96,29 @@ public void setup() {
      .setNumberOfTickMarks(10)
      ;
     
+    checkbox = cp5.addCheckBox("checkBox")
+                .setPosition(50, 550)
+                .setSize(200, 19)
+                .setItemsPerRow(1)
+                .setSpacingColumn(100)
+                .setSpacingRow(20)
+                .addItem("0", 0)
+                ;
 }  
 
+//controlEvent determines if event is from checkbox, and alters draw mode accordingly
 public void controlEvent(ControlEvent theEvent) {
-  println(theEvent.getController().getName());
+  if(theEvent.isFrom(checkbox)) {
+      if(trace) {
+        trace = false;
+      } else {
+        trace = true;
+      }
+  }
+}
+
+public void checkBox(float[] a) {
+  println(a);
 }
 
 public void spinA(float newSpin) {
@@ -111,6 +137,7 @@ public void radiusB(float newRadius) {
   radiusB = newRadius;
 }
  
+ //Refresh screen
 public void Graph() {
   i = 1;
   background(255);
@@ -152,19 +179,33 @@ public void draw() {
   thetaB = spinB * count;
   }
 
+  //Insert Text
   text("Spin A", 300, 40);
   text("Spin B", 550, 40);
-  text("Radius A", 50, 540);
+  text("Radius A", 300, 540);
   text("Radius B", 550, 540);
+  text("Toggle Plotting", 50, 540);
+  
+  if(trace) {
+    print();
+  }
   
 }
 
+//Prints out the plotted points
 public void print() {
-  for(int j = 1; j < count; j++){
-   ellipse(Px[j] * 30 + 400, (Py[j] * 30) - 50, 1, 1);
-   ellipse(Nx[j] * 30 + 400, (Ny[j] * 30) - 50, 1, 1);
+  if(trace == false) {
+    for(int j = 1; j < count; j++){
+     ellipse(Px[j] * 30 + 400, (Py[j] * 30) - 50, 1, 1);
+     ellipse(Nx[j] * 30 + 400, (Ny[j] * 30) - 50, 1, 1);
+    }
+  } else {
+    for(int j = 1; j < i; j++){
+     ellipse(Px[j] * 30 + 400, (Py[j] * 30) - 50, 1, 1);
+     ellipse(Nx[j] * 30 + 400, (Ny[j] * 30) - 50, 1, 1);
+    }
   }
-   if(i < numPts - 1) {
+  if(i < numPts - 1) {
      i++;
    }
 }
